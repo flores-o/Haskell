@@ -1,3 +1,7 @@
+module Encode
+(packDuplicates,
+lengthEncoding)
+where
 packDuplicates :: Eq a => [a] -> [[a]]
 packDuplicates x = foldr func [] x
     where func el [] = [[el]]
