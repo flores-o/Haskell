@@ -69,3 +69,23 @@ ex2t1, ex2t2, ex2t3 :: Bool
 ex2t1 = joaca ('e', 5) [0, 3, 2, 7] == [('e', 5), ('c', 4), ('e', 5), ('g', 4), ('h', 6)]
 ex2t2 = joaca ('e', 5) [0, 3, 9, 2, 7] == [('e', 5), ('c', 4), ('e', 5), ('g', 4), ('h', 6)]
 ex2t3 = joaca ('a', 8) [0, 3, 2, 7] == [('a', 8), ('c', 7)]
+
+data ArboreJoc = Nod Pozitie [ArboreJoc]
+    deriving (Show, Eq)
+
+parcurge :: Int -> ArboreJoc -> ArboreJoc
+parcurge adancime (Nod p as)
+    | adancime <= 0 = Nod p []
+    | otherwise     = Nod p (map (parcurge (adancime - 1)) as)
+
+--genereaza :: Pozitie -> ArboreJoc
+--genereaza poz1 = Nod poz1 (fmap genereaza pozNoi)
+--                    where pozNoi = fmap (mutaDacaValid poz1) mutariPosibile
+
+genereazaHelper :: [Pozitie] -> Pozitie -> ArboreJoc
+genereazaHelper acc poz1 = Nod poz1 (fmap (genereazaHelper (poz1 : acc)) pozNoi2)
+                    where pozNoi = fmap (mutaDacaValid poz1) mutariPosibile
+                          pozNoi2 = filter (\x -> not (x `elem` acc)) pozNoi
+
+genereaza :: Pozitie -> ArboreJoc
+genereaza = genereazaHelper []
